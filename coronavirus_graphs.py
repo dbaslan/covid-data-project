@@ -4,7 +4,9 @@ import matplotlib.pyplot as plt
 
 
 def regions_piechart(region, show=False):
-    """hello
+    """receive a region, draw a piechart of coronavirus deaths and
+    recoveries in the region and save it as region_piechart.png under
+    /graphs
     """
     region_array = cs.region_data()
     index = np.where(region_array == region)[0][0]
@@ -19,7 +21,6 @@ def regions_piechart(region, show=False):
     plt.savefig("graphs/region_piechart.png")
     if show:
         plt.show()
-
 
 
 def countries_barchart(show=False):

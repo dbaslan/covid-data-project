@@ -4,8 +4,8 @@ from bs4 import BeautifulSoup
 
 
 def cases_death():
-    """Scrape Covid data from worldometers,
-    clean it and store it in a numpy array.
+    """Scrape Covid data from worldometers,clean it and store it in a
+    numpy array.
     """
     link = "https://bit.ly/3din7Bs"
     page = requests.get(link)
