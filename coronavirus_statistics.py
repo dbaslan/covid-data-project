@@ -48,20 +48,20 @@ def region_data():
     return region_array
 
 
-def country_data(countries = "all"):
+def country_data(countries="all"):
     """receive a list of countries and return a 2D numpy array where
     each line contains: country, number of cases normalized by
     population, number of deaths normalized by population, population
     """
     covid_array = read_data()
     if countries == "all":
-        normalized_array = np.delete(covid_array, [3,5,6], 1)
+        normalized_array = np.delete(covid_array, [3, 5, 6], 1)
     else:
         indexes = []
         for index, row in enumerate(covid_array):
             if row[0] in countries:
                 indexes.append(index)
-        normalized_array = np.delete(covid_array[indexes], [3,5,6], 1)
+        normalized_array = np.delete(covid_array[indexes], [3, 5, 6], 1)
 
     for row in normalized_array:
         row[1] = str(int(row[1]) / int(row[3]))
@@ -70,14 +70,14 @@ def country_data(countries = "all"):
     return normalized_array
 
 
-def top_country_data(k, n = 0):
+def top_country_data(k, n=0):
     """receive two integers, k and n and return a 2D numpy array that
     contains k lines of the format country, number of deaths normalized
     by population, latitude and longitude. The countries are the subset
     of the countries with population size at least n that have highest
     number of deaths normalized by population.
     """
-    trimmed_array = np.delete(read_data(), [1,3], 1)
+    trimmed_array = np.delete(read_data(), [1, 3], 1)
     indexes = []
     for index, row in enumerate(trimmed_array):
         if not int(row[2]) >= n:
