@@ -1,3 +1,9 @@
+# File name: coronavirus_statistics.py
+# Author: Deniz Aslan
+# Date created: 26.04.2021
+# Last modified: 06.05.2021
+# Python Version: 3.9
+
 import numpy as np
 
 
@@ -28,10 +34,12 @@ def region_data():
         if row[3] not in region_list:
             region_list.append(row[3])
 
+    # create empty array and add regions as first column
     region_array = np.empty((6, 4), dtype=np.dtype('U20'))
     for index, row in enumerate(region_array):
         row[0] = region_list[index]
 
+    # sum the data from each country and add into appropriate region
     n_cases = 0
     n_deaths = 0
     population = 0
@@ -63,6 +71,7 @@ def country_data(countries="all"):
                 indexes.append(index)
         normalized_array = np.delete(covid_array[indexes], [3, 5, 6], 1)
 
+    # divide by population to normalize number of cases and deaths
     for row in normalized_array:
         row[1] = str(int(row[1]) / int(row[3]))
         row[2] = str(int(row[2]) / int(row[3]))
@@ -74,18 +83,24 @@ def top_country_data(k, n=0):
     """receive two integers, k and n and return a 2D numpy array that
     contains k lines of the format country, number of deaths normalized
     by population, latitude and longitude. The countries are the subset
-    of the countries with population size at least n that have highest
-    number of deaths normalized by population.
+    of the countries with population size at least n that have the
+    highest number of deaths normalized by population.
     """
     trimmed_array = np.delete(read_data(), [1, 3], 1)
     indexes = []
+
+    # find rows with population >= n and delete the rest, using indexes
     for index, row in enumerate(trimmed_array):
         if not int(row[2]) >= n:
             indexes.append(index)
     trimmed_array = np.delete(trimmed_array, indexes, 0)
+
+    # divide by population then remove population column
     for row in trimmed_array:
         row[1] = int(row[1]) / int(row[2])
     trimmed_array = np.delete(trimmed_array, [2], 1)
+
+    # sort rows by normalized death rate and select first k rows
     trimmed_array = trimmed_array[np.argsort(
         -trimmed_array[:, 1].astype(np.float))]
     trimmed_array = trimmed_array[:k]
