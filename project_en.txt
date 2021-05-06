@@ -1,0 +1,124 @@
+Gather, analyze, and visualize coronavirus data 
+
+For the final project, you will work with the coronavirus data. We will work on it 
+during three classes. Attending the project classes is the key to success: we will 
+discuss possible approaches to solving the tasks, make sure that you understand 
+the tasks correctly, and of course, you will be able to show me your solutions (or 
+ideas) and to get feedback on how you can improve and get a higher note. 
+
+Criteria 
+
+The project is strictly individual. You can discuss ideas and approaches with other 
+students, but you must not copy code neither from them, nor from the internet. You 
+must submit each part of the project before the deadline as a .py file. 
+
+For each part, you can get: 
+
+• 
+The number of points indicated in the parentheses. If you need help with a 
+particular task, you can ask us for a hint. You can also ask us to give you a 
+solution for a particular task if you can't solve it but need it to finish the other 
+tasks. 
+• 
+The clarity of the code is important! (PEP 8 standard, structure of the files, 
+docstrings, naming of the variables, comments that explain what your code 
+does …) 
+At the defense, we will have two evaluation elements: 
+
+• 
+First, we will ask you to explain what different parts of your code do. For this 
+evaluation element, you can get the maximum of 6 points (2 points for each 
+part). 
+• 
+Second, a quiz that will check your knowledge of the curriculum. For this 
+evaluation element, you can get the maximum of 10 points. 
+In total, you can get the maximum of 45 points that we will normalize into a final 
+note from 1 to 20. 
+
+Part I: Gather the data (8 points) 
+
+Functions of this part must be placed into the file crawler.py. 
+
+1. Write a function cases_deaths that returns a 2D numpy array by crawling 
+https://bit.ly/3din7Bs. Each line of the array should contain four fields: 
+country, number of cases, number of deaths, region. The function must 
+remove commas from numbers (1,659 should look like 1659 in the scv file), 
+replace Japan (+Diamond Princess) with Japan, and remove the entry 
+corresponding to MS Zaandam (which is a ship). 
+
+2. Write a function population that creates a 2D numpy array by crawling 
+https://bit.ly/3lWkVDO. Each line should contain two fields: country, size of 
+the population. 
+3. Write a function capital_coordinates. It should read the file worldcities.csv 
+from Moodle and create a 2D numpy array that for each country contains the 
+coordinates of its capital. Be careful, the file contains the coordinates of 
+several cities for each country, you need to understand which of them is the 
+capital. 
+4. Add a function main to crawler.py. It should create a file 
+coronavirus_data.csv, each line of which contains the following fields: 
+country, number of cases, number of deaths, region, population, latitude, 
+longitude. Don't forget to add the first line explaining what data is in the file. 
+The file should contain all the countries appearing in the file worldcities.csv 
+and the numpy array. Add the following two lines to the bottom of the file 
+your code to call main() whenever you run crawler.py: 
+if __name__ == "__main__": 
+main() 
+
+Part II: Analysing the data (8 points) 
+
+The functions of this part must form a module coronavirus_statistics. 
+
+1. Write a function read_data that reads coronavirus_data.csv and loads it into a 
+numpy array. 
+2. Write a function region_data that returns a 2D numpy array where each line 
+contains: a region, number of cases, number of deaths, population for that 
+region. 
+3. Write a function country_data that receives a list of countries and returns a 2D 
+numpy array where each line contains: country, number of cases normalized by 
+the size of the population, number of deaths normalized by the size of the 
+population, population. The list of countries is an optional argument, if not 
+given, consider it to contain all countries. 
+4. Write a function top_country_data that receives two integers, k and n and 
+returns a 2D numpy array. This numpy array contains k lines of the format 
+country, number of deaths normalized by the size of the population, latitude, 
+longitude. The countries are the subset of the countries with population size at 
+least n that have highest number of deaths normalized by the size of the 
+population. The argument n must be optional with n = 0 by default. 
+Part III : Visualizing the data (13 points) 
+
+Functions of this part must be written in a file coronavirus_graphs.py. Each function 
+of this part receives an optional argument show equal to False by default, and shows a 
+graph if show is True. Whenever a function from this part is called, you must save the 
+
+
+resulting graph in the folder ./graphs with a unique name. 
+
+1. Write a function regions_piechart that receives a region as an argument and 
+draws a piechart where one fraction corresponds to coronavirus deaths and one 
+fraction corresponds to the number of people who contracted the virus and 
+recovered. 
+2. Write a function countries_barchart that receives a list of countries as an 
+argument and draws two barcharts: one that shows the number of cases per 1 
+million of citizens, and the other the number of deaths per 1 million. The list of 
+countries is an optional argument, if not given, consider it to contain all 
+countries. 
+3. Write a function highest_mortality that takes two integers, n and k. From all 
+countries with population size at least n, it must extract k countries with the 
+highest number of deaths per 1 million and draw a barchart for these countries. 
+The argument n is optional and equals to 0 by default. 
+4. Write a function map. It takes an integer k as an argument and draws a map. 
+On this map, it puts k circles with centers in the capital of countries with 
+highest number of deaths normalized by the size of the population. The size of 
+the circle should depend on the mortality rate. Hint: use module cartopy. Your 
+graph should look like below. 
+5. Write a function main(), start by asking the user if they want to study the 
+coronavirus data. If the user replies “Yes”, the function should suggest to draw 
+one of the graphs from Part III. Don't forget to ask for the values of the 
+arguments that are needed to draw the graph. When the graph is drawn, the 
+script should ask the user if they want to continue or to quit. Add the following 
+two lines to the bottom of the file your code to call main() whenever you run 
+coronavirus_graphs.py: 
+if __name__ == "__main__": 
+main() 
+
+
