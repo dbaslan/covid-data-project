@@ -4,7 +4,7 @@ Final project for the course "Initiation a la Programmation", at the Ecole Norma
 - Scrapes population, coordinate and Covid-19 data on various cities and countries.
 - Cleans up the data and saves it in the appropriate format.
 - Visualizes the data.
-- Run [coronavirus_graphs.py](/data_graph.png) to start.
+- Run [coronavirus_graphs.py](/coronavirus_graphs.py) to start.
   
 Modules used:
 - [NumPy](https://numpy.org/) (1.20.1)
