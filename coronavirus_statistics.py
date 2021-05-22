@@ -1,7 +1,7 @@
 # File name: coronavirus_statistics.py
 # Author: Deniz Aslan
 # Date created: 26.04.2021
-# Last modified: 06.05.2021
+# Last modified: 22.05.2021
 # Python Version: 3.9
 
 import numpy as np
@@ -56,20 +56,21 @@ def region_data():
     return region_array
 
 
-def country_data(countries="all"):
+def country_data(countries=None):
     """receive a list of countries and return a 2D numpy array where
     each line contains: country, number of cases normalized by
     population, number of deaths normalized by population, population
     """
     covid_array = read_data()
-    if countries == "all":
-        normalized_array = np.delete(covid_array, [3, 5, 6], 1)
-    else:
-        indexes = []
-        for index, row in enumerate(covid_array):
-            if row[0] in countries:
-                indexes.append(index)
-        normalized_array = np.delete(covid_array[indexes], [3, 5, 6], 1)
+    if countries is None:
+        countries = np.ndarray.tolist(covid_array[:, 0])
+    indexes = []
+    if isinstance(countries, str):
+        countries = countries.split(",")
+    for index, row in enumerate(covid_array):
+        if row[0] in countries:
+            indexes.append(index)
+    normalized_array = np.delete(covid_array[indexes], [3, 5, 6], 1)
 
     # divide by population to normalize number of cases and deaths
     for row in normalized_array:
@@ -102,7 +103,7 @@ def top_country_data(k, n=0):
 
     # sort rows by normalized death rate and select first k rows
     trimmed_array = trimmed_array[np.argsort(
-        -trimmed_array[:, 1].astype(np.float))]
+        -trimmed_array[:, 1].astype(float))]
     trimmed_array = trimmed_array[:k]
 
     return trimmed_array
