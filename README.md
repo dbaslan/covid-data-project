@@ -1,7 +1,9 @@
 # covid-data-project
-Final project for the course "Initiation a la Programmation", at the Ecole Normale Superieure de Paris.
+Final project for the course "Initiation à la Programmation", 
+at the Ecole Normale Supérieure de Paris.
 
-- Scrapes population, coordinate and Covid-19 data on various cities and countries.
+- Scrapes population, coordinate and Covid-19 data on various 
+  cities and countries.
 - Cleans up the data and saves it in the appropriate format.
 - Visualizes the data.
 - Run [coronavirus_graphs.py](/coronavirus_graphs.py) to start.
@@ -19,4 +21,4 @@ Special thanks to:
 - Dr. Tatiana STARIKOVSKAYA
 - Dr. Pierre ABOULKER
 
-Last updated: 22.05.2021
+Last updated: 27.05.2021

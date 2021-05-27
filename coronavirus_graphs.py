@@ -1,7 +1,7 @@
 # File name: coronavirus_graphs.py
 # Author: Deniz Aslan
 # Date created: 06.05.2021
-# Last modified: 22.05.2021
+# Last modified: 27.05.2021
 # Python Version: 3.9
 
 import coronavirus_statistics as cs
@@ -26,7 +26,7 @@ def regions_piechart(region, show=False):
     fractions = [n_deaths, n_recovered]
     plt.pie(fractions, labels=labels, autopct="%1.1f%%")
     plt.title(f"Fraction of COVID-19 patients in {region} who died")
-    plt.savefig("graphs/region_piechart.png")
+    plt.savefig(f"graphs/{region}_piechart.png")
     if show:
         plt.show()
 
@@ -37,14 +37,14 @@ def countries_barchart(countries=None, show=False):
     """
     bar_array = cs.country_data(countries)
 
-    # multiply by a million:
-    for row in bar_array:
-        row[1] = str(float(row[1]) * 1000000)
-        row[2] = str(float(row[2]) * 1000000)
+    # choose data, multiply by a million:
+    country_names = bar_array[:, 0]
+    cases = bar_array[:, 1].astype(float) * 1000000
+    deaths = bar_array[:, 2].astype(float) * 1000000
 
     # visualize as two bar charts and save:
     plt.subplot(2, 1, 1)
-    plt.bar(bar_array[:, 0], bar_array[:, 1].astype(float))
+    plt.bar(country_names, cases)
     if len(bar_array) > 6:
         plt.xticks(rotation="vertical")
     plt.xlabel("Country")
@@ -53,7 +53,7 @@ def countries_barchart(countries=None, show=False):
     plt.grid()
     plt.tight_layout()
     plt.subplot(2, 1, 2)
-    plt.bar(bar_array[:, 0], bar_array[:, 2].astype(float))
+    plt.bar(country_names, deaths)
     if len(bar_array) > 6:
         plt.xticks(rotation="vertical")
     plt.xlabel("Country")
@@ -68,11 +68,11 @@ def countries_barchart(countries=None, show=False):
 def highest_mortality(k, n=0, show=False):
     """receive integers k, n and draw a bar chart of k countries with
     the highest normalized deaths with n minimum population, and save
-    it as top_countries_barchart.png under /graphs
+    it as top_12_countries_barchart.png under /graphs
     """
     trimmed_array = cs.top_country_data(k, n)
 
-    # visualize as br chart and save:
+    # visualize as bar chart and save:
     plt.bar(trimmed_array[:, 0], trimmed_array[:, 1].astype(float) * 1000000)
     if len(trimmed_array) > 6:
         plt.xticks(rotation="vertical")
@@ -81,14 +81,14 @@ def highest_mortality(k, n=0, show=False):
     plt.title("Covid Deaths Per 1 Million, By Country")
     plt.grid()
     plt.tight_layout()
-    plt.savefig("graphs/top_countries_barchart.png")
+    plt.savefig(f"graphs/top_{k}_countries_barchart.png")
     if show:
         plt.show()
 
 
 def map(k, show=False):
     """receive integer k, mark k countries with highest number of
-    normalized deaths on a map and save it as top_countries_map.png
+    normalized deaths on a map and save it as top_12_countries_map.png
     under /graphs
     """
     trimmed_array = cs.top_country_data(k)
@@ -98,11 +98,12 @@ def map(k, show=False):
     ax.stock_img()
     ax.plot(trimmed_array[:, 3].astype(float),
             trimmed_array[:, 2].astype(float),
-            "ro", markersize=2, transform=ccrs.Geodetic())
+            "ro", markersize=2, transform=ccrs.PlateCarree())
     plt.title(f"Top {k} Countries With Highest Rates Of Covid-19 Deaths, "
               f"Normalized By Population")
     plt.tight_layout()
-    plt.savefig("graphs/top_countries_map.png", bbox_inches="tight")
+    plt.savefig(f"graphs/top_{k}_countries_map.png",
+                bbox_inches="tight")
     if show:
         plt.show()
 
@@ -114,8 +115,9 @@ def main():
     choice_1 = choice_2 = choice_3 = ask_show = cont = region = None
     regions = ["Asia", "Africa", "Europe", "North America",
                "South America", "Australia/Oceania"]
+    answer_list = ["yes", "no", "y", "n"]
 
-    while choice_1 not in ["yes", "no", "y", "n"]:
+    while choice_1 not in answer_list:
         choice_1 = input("Would you like to study global Covid-19 "
                          "data? Type yes or no.")
 
@@ -141,13 +143,13 @@ def main():
             region = input("Please pick a continent (Australia/Oceania, "
                            "Africa, North America, South America, Europe, "
                            "Asia:")
-        while ask_show not in ["yes", "no", "y", "n"]:
+        while ask_show not in answer_list:
             ask_show = input("Would you like to view the chart? (yes/no)")
         if ask_show in ["yes", "y"]:
             regions_piechart(region, True)
         else:
             regions_piechart(region)
-        while cont not in ["yes", "no", "y", "n"]:
+        while cont not in answer_list:
             cont = input("Would you like to continue? (yes/no)")
         if cont in ["yes", "y"]:
             main()
@@ -171,7 +173,7 @@ def main():
                 countries_barchart(countries, True)
             else:
                 countries_barchart(countries)
-        while cont not in ["yes", "no", "y", "n"]:
+        while cont not in answer_list:
             cont = input("Would you like to continue? (yes/no)")
         if cont in ["yes", "y"]:
             main()
@@ -181,9 +183,9 @@ def main():
     elif choice_2 == "3":
         n_countries = input("Please provide the number of countries "
                             "you would like to include:")
-        while ask_show not in ["yes", "no", "y", "n"]:
+        while ask_show not in answer_list:
             ask_show = input("Would you like to view the chart? (yes/no)")
-        while choice_3 not in ["yes", "no", "y", "n"]:
+        while choice_3 not in answer_list:
             choice_3 = input("Would you lke to specify a minimum number "
                              "for the population? (yes/no)")
         if choice_3 in ["yes", "y"]:
@@ -200,7 +202,7 @@ def main():
                 highest_mortality(int(n_countries), show=True)
             else:
                 highest_mortality(int(n_countries))
-        while cont not in ["yes", "no", "y", "n"]:
+        while cont not in answer_list:
             cont = input("Would you like to continue? (yes/no)")
         if cont in ["yes", "y"]:
             main()
@@ -210,13 +212,13 @@ def main():
     elif choice_2 == "4":
         n_countries = input("Please provide the number of countries you "
                             "would like to include:")
-        while ask_show not in ["yes", "no", "y", "n"]:
+        while ask_show not in answer_list:
             ask_show = input("Would you like to view the chart? (yes/no)")
         if ask_show in ["yes", "y"]:
             map(int(n_countries), True)
         else:
             map(int(n_countries))
-        while cont not in ["yes", "no", "y", "n"]:
+        while cont not in answer_list:
             cont = input("Would you like to continue? (yes/no)")
         if cont in ["yes", "y"]:
             main()
